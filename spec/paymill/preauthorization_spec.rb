@@ -28,6 +28,12 @@ describe Paymill::Preauthorization do
       Paymill.should_receive(:request).with(:post, "preauthorizations", valid_attributes).and_return("data" => {})
       Paymill::Preauthorization.create(valid_attributes)
     end
+
+    it "returns instance of Paymill::Transaction class" do
+      Paymill.stub(:request).with(:post, "preauthorizations", valid_attributes).and_return("data" => {})
+      instance = Paymill::Preauthorization.create(valid_attributes)
+      instance.class.should eql(Paymill::Transaction)
+    end
   end
 
   describe ".delete" do

@@ -18,7 +18,10 @@ describe Paymill::Transaction do
       refunds: [
         {:id => "refund_abc"}
       ],
-      source: 'paymill-ruby'
+      source: 'paymill-ruby',
+      preauthorization: {
+        id: "preauth_id"
+      }
     }
   end
 
@@ -43,6 +46,7 @@ describe Paymill::Transaction do
       transaction.refunds.first.should_not be_nil
       transaction.refunds.first[:id].should eql("refund_abc")
       transaction.source.should eql("paymill-ruby")
+      transaction.preauthorization[:id].should eql("preauth_id")
     end
   end
 

@@ -1,0 +1,1 @@
+Paymill::Payment.all

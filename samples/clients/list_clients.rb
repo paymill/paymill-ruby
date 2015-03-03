@@ -1,0 +1,1 @@
+Paymill::Client.all

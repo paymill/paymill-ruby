@@ -29,6 +29,8 @@ module Paymill
         expect( payment.created_at ).to be_a Time
         expect( payment.updated_at ).to be_a Time
         expect( payment.app_id ).to be_nil
+        expect( payment.iban ).to be_nil
+        expect( payment.bic ).to be_nil
 
         # TODO[VNi]: be more descriptive
       end
@@ -61,6 +63,8 @@ module Paymill
           expect( payment.created_at ).to be_a Time
           expect( payment.updated_at ).to be_a Time
           expect( payment.app_id ).to be_nil
+          expect( payment.iban ).to be_nil
+          expect( payment.bic ).to be_nil
         end
 
         it 'should create client with token and client', :vcr do
@@ -85,6 +89,8 @@ module Paymill
           expect( payment.created_at ).to be_a Time
           expect( payment.updated_at ).to be_a Time
           expect( payment.app_id ).to be_nil
+          expect( payment.iban ).to be_nil
+          expect( payment.bic ).to be_nil
         end
 
         it 'should throw exception when creating a clinent with invalid token', :vcr do
@@ -126,6 +132,8 @@ module Paymill
           expect( payment.created_at ).to be_a Time
           expect( payment.updated_at ).to be_a Time
           expect( payment.app_id ).to be_nil
+          expect( payment.iban ).to be_nil
+          expect( payment.bic ).to be_nil
         end
 
         it 'should create client with token and client', :vcr do
@@ -147,6 +155,8 @@ module Paymill
           expect( payment.created_at ).to be_a Time
           expect( payment.updated_at ).to be_a Time
           expect( payment.app_id ).to be_nil
+          expect( payment.iban ).to be_nil
+          expect( payment.bic ).to be_nil
         end
       end
     end

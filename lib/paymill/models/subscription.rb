@@ -4,7 +4,7 @@ module Paymill
     include Restful::Delete
 
     attr_reader :livemode, :temp_amount, :trial_start, :end_of_period, :next_capture_at, :canceled_at, :currency,
-                :is_canceled, :is_deleted, :status, :client, :interval, :payment, :name
+                :is_canceled, :is_deleted, :status, :client, :interval, :payment, :name, :mandate_reference
     attr_accessor :amount, :offer, :trial_end, :period_of_validity
 
     def currency=( currency )
@@ -103,7 +103,7 @@ module Paymill
     end
 
     def self.allowed_arguments
-      [:offer, :payment, :client, :amount, :currency, :interval, :name, :period_of_validity, :start_at]
+      [:offer, :payment, :client, :amount, :currency, :interval, :name, :period_of_validity, :start_at, :mandate_reference]
     end
 
     def parse_timestamps

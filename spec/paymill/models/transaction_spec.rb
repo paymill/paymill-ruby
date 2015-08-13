@@ -23,7 +23,7 @@ module Paymill
       end
 
       it 'should create transaction with token', :vcr do
-        transaction = Transaction.create( token: @token, amount: amount, currency: currency )
+        transaction = Transaction.create( token: @token, amount: amount, currency: currency, mandate_reference: 'Terminator' )
         transaction_id = transaction.id
 
         expect( transaction ).to be_a Transaction
@@ -32,6 +32,7 @@ module Paymill
         expect( transaction.amount ).to be amount
         expect( transaction.origin_amount ).to be amount
         expect( transaction.status ).to eq 'closed'
+        expect( transaction.mandate_reference ).to eq 'Terminator'
         expect( transaction.description ).to be_empty
         expect( transaction.livemode ).to be false
         expect( transaction.refunds ).to be_nil
@@ -59,6 +60,7 @@ module Paymill
         expect( transaction.origin_amount ).to be amount
         expect( transaction.status ).to eq 'closed'
         expect( transaction.description ).to eq 'The Italian Stallion'
+        expect( transaction.mandate_reference ).to be nil
         expect( transaction.livemode ).to be false
         expect( transaction.refunds ).to be_nil
         expect( transaction.currency ).to eq currency

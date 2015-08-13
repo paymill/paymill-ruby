@@ -4,7 +4,7 @@ module Paymill
 
     attr_accessor :description
     attr_reader :amount, :client, :currency, :origin_amount, :status, :livemode, :refunds,
-                :response_code, :is_fraud, :short_id, :fees, :invoices, :payment, :preauthorization
+                :response_code, :is_fraud, :short_id, :fees, :invoices, :payment, :preauthorization, :mandate_reference
 
     protected
     def self.create_with?( incoming_arguments )
@@ -17,7 +17,7 @@ module Paymill
     end
 
     def self.allowed_arguments
-      [:amount, :client, :currency, :description, :preauthorization, :fee_amount, :fee_payment, :fee_currency]
+      [:amount, :client, :currency, :description, :preauthorization, :fee_amount, :fee_payment, :fee_currency, :mandate_reference]
     end
 
     def self.mutual_excluded_arguments

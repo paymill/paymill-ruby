@@ -158,12 +158,13 @@ module Paymill
       end
 
       it 'should create subscription without offer with name and period_of_validity and start_at', :vcr do
-        subscription = Subscription.create( payment: @payment, amount: amount, currency: currency, interval: interval, name: 'Basic Stallion', period_of_validity: '2 YEAR', start_at: 2.days.from_now )
+        subscription = Subscription.create( payment: @payment, amount: amount, currency: currency, interval: interval, name: 'Basic Stallion', period_of_validity: '2 YEAR', start_at: 2.days.from_now, mandate_reference: 'Terminator' )
         subscription_id = subscription.id
 
         expect( subscription ).to be_a Subscription
 
         expect( subscription.id ).to be_a String
+        expect( subscription.mandate_reference ).to eq 'Terminator'
         expect( subscription.offer.amount ).to be amount
         expect( subscription.offer.currency ).to eq currency
         expect( subscription.offer.interval ).to eq interval

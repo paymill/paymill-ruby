@@ -2,7 +2,7 @@ module Paymill
   class Preauthorization < Base
     include Restful::Delete
 
-    attr_reader :amount, :client, :currency, :description, :livemode, :payment, :status, :transaction
+    attr_reader :amount, :currency, :description, :status, :livemode, :payment, :client, :transaction
 
     protected
     def self.create_with?( incoming_arguments )

@@ -5,16 +5,25 @@ module Paymill
 
     let( :amount ) { 2990 }
     let( :currency ) { 'USD' }
-    let( :token ) { '098f6bcd4621d373cade4e832627b4f6' }
     let( :client ) { Client.create( email: 'rocky.balboa@qaiware.com' ) }
-    let( :payment ) { Payment.create( token: token, client: client ) }
-    let( :preauth ) { Preauthorization.create( payment: payment, amount: amount, currency: currency, description: 'The Italian Stallion' ) }
 
     transaction_id = nil
 
     context '::create' do
+      before( :each ) do
+        uri = URI.parse("https://test-token.paymill.com?transaction.mode=CONNECTOR_TEST&channel.id=941569045353c8ac2a5689deb88871bb&jsonPFunction=paymilljstests&account.number=4111111111111111&account.expiry.month=12&account.expiry.year=2015&account.verification=123&account.holder=John%20Rambo&presentation.amount3D=3201&presentation.currency3D=EUR")
+        https = Net::HTTP.new(uri.host, uri.port)
+        https.use_ssl = true
+        request = Net::HTTP::Get.new(uri.request_uri)
+        request.basic_auth( ENV['PAYMILL_API_TEST_KEY'], "" )
+        response = https.request(request)
+        @token = response.body.match('tok_[a-z|0-9]+')[0]
+        @payment = Payment.create( token: @token, client: client.id )
+        @preauth = Preauthorization.create( payment: @payment, amount: amount, currency: currency, description: 'The Italian Stallion' )
+      end
+
       it 'should create transaction with token', :vcr do
-        transaction = Transaction.create( token: token, amount: amount, currency: currency )
+        transaction = Transaction.create( token: @token, amount: amount, currency: currency )
         transaction_id = transaction.id
 
         expect( transaction ).to be_a Transaction
@@ -23,7 +32,7 @@ module Paymill
         expect( transaction.amount ).to be amount
         expect( transaction.origin_amount ).to be amount
         expect( transaction.status ).to eq 'closed'
-        expect( transaction.description ).to be_nil
+        expect( transaction.description ).to be_empty
         expect( transaction.livemode ).to be false
         expect( transaction.refunds ).to be_nil
         expect( transaction.currency ).to eq currency
@@ -31,7 +40,7 @@ module Paymill
         expect( transaction.updated_at ).to be_a Time
         expect( transaction.response_code ).to be 20000
         expect( transaction.is_fraud ).to be false
-        expect( transaction.short_id ).to eq '7357.7357.7357'
+        expect( transaction.short_id ).to eq '0000.9999.0000'
         expect( transaction.fees ).to be_empty
         expect( transaction.invoices ).to be_empty
         expect( transaction.payment ).to be_a Payment
@@ -41,7 +50,7 @@ module Paymill
       end
 
       it 'should create transaction with token and description', :vcr do
-        transaction = Transaction.create( token: token, amount: amount, currency: currency, description: 'The Italian Stallion' )
+        transaction = Transaction.create( token: @token, amount: amount, currency: currency, description: 'The Italian Stallion' )
 
         expect( transaction ).to be_a Transaction
 
@@ -57,7 +66,7 @@ module Paymill
         expect( transaction.updated_at ).to be_a Time
         expect( transaction.response_code ).to be 20000
         expect( transaction.is_fraud ).to be false
-        expect( transaction.short_id ).to eq '7357.7357.7357'
+        expect( transaction.short_id ).to eq '0000.9999.0000'
         expect( transaction.fees ).to be_empty
         expect( transaction.invoices ).to be_empty
         expect( transaction.payment ).to be_a Payment
@@ -67,7 +76,7 @@ module Paymill
       end
 
       it 'should create transaction with payment', :vcr do
-        transaction = Transaction.create( payment: payment, amount: amount, currency: currency )
+        transaction = Transaction.create( payment: @payment, amount: amount, currency: currency )
 
         expect( transaction ).to be_a Transaction
 
@@ -75,7 +84,7 @@ module Paymill
         expect( transaction.amount ).to be amount
         expect( transaction.origin_amount ).to be amount
         expect( transaction.status ).to eq 'closed'
-        expect( transaction.description ).to be_nil
+        expect( transaction.description ).to be_empty
         expect( transaction.livemode ).to be false
         expect( transaction.refunds ).to be_nil
         expect( transaction.currency ).to eq currency
@@ -83,10 +92,10 @@ module Paymill
         expect( transaction.updated_at ).to be_a Time
         expect( transaction.response_code ).to be 20000
         expect( transaction.is_fraud ).to be false
-        expect( transaction.short_id ).to eq '7357.7357.7357'
+        expect( transaction.short_id ).to eq '0000.9999.0000'
         expect( transaction.fees ).to be_empty
         expect( transaction.invoices ).to be_empty
-        expect( transaction.payment.id ).to eq payment.id
+        expect( transaction.payment.id ).to eq @payment.id
         expect( transaction.client.id ).to eq client.id
         expect( transaction.client.email ).to eq 'rocky.balboa@qaiware.com'
         expect( transaction.app_id ).to be_nil
@@ -95,7 +104,7 @@ module Paymill
       end
 
       it 'should create transaction with preauthorization', :vcr do
-        transaction = Transaction.create( preauthorization: preauth, amount: amount, currency: currency )
+        transaction = Transaction.create( preauthorization: @preauth, amount: amount, currency: currency )
 
         expect( transaction ).to be_a Transaction
 
@@ -103,7 +112,7 @@ module Paymill
         expect( transaction.amount ).to be amount
         expect( transaction.origin_amount ).to be amount
         expect( transaction.status ).to eq 'closed'
-        expect( transaction.description ).to be_nil
+        expect( transaction.description ).to be_empty
         expect( transaction.livemode ).to be false
         expect( transaction.refunds ).to be_nil
         expect( transaction.currency ).to eq currency
@@ -111,19 +120,19 @@ module Paymill
         expect( transaction.updated_at ).to be_a Time
         expect( transaction.response_code ).to be 20000
         expect( transaction.is_fraud ).to be false
-        expect( transaction.short_id ).to eq '7357.7357.7357'
+        expect( transaction.short_id ).to eq '0000.9999.0000'
         expect( transaction.fees ).to be_empty
         expect( transaction.invoices ).to be_empty
-        expect( transaction.payment.id ).to eq payment.id
+        expect( transaction.payment.id ).to eq @payment.id
         expect( transaction.client.id ).to eq client.id
         expect( transaction.client.email ).to eq 'rocky.balboa@qaiware.com'
         expect( transaction.app_id ).to be_nil
 
-        expect( transaction.preauthorization.id ).to eq preauth.id
+        expect( transaction.preauthorization.id ).to eq @preauth.id
       end
 
       it 'should create transaction with client and payment', :vcr do
-        transaction = Transaction.create( payment: payment, amount: amount, currency: currency, client: client )
+        transaction = Transaction.create( payment: @payment, amount: amount, currency: currency, client: client )
 
         expect( transaction ).to be_a Transaction
 
@@ -131,7 +140,7 @@ module Paymill
         expect( transaction.amount ).to be amount
         expect( transaction.origin_amount ).to be amount
         expect( transaction.status ).to eq 'closed'
-        expect( transaction.description ).to be_nil
+        expect( transaction.description ).to be_empty
         expect( transaction.livemode ).to be false
         expect( transaction.refunds ).to be_nil
         expect( transaction.currency ).to eq currency
@@ -139,10 +148,10 @@ module Paymill
         expect( transaction.updated_at ).to be_a Time
         expect( transaction.response_code ).to be 20000
         expect( transaction.is_fraud ).to be false
-        expect( transaction.short_id ).to eq '7357.7357.7357'
+        expect( transaction.short_id ).to eq '0000.9999.0000'
         expect( transaction.fees ).to be_empty
         expect( transaction.invoices ).to be_empty
-        expect( transaction.payment.id ).to eq payment.id
+        expect( transaction.payment.id ).to eq @payment.id
         expect( transaction.client.id ).to eq client.id
         expect( transaction.client.email ).to eq 'rocky.balboa@qaiware.com'
         expect( transaction.app_id ).to be_nil
@@ -151,15 +160,15 @@ module Paymill
       end
 
       it 'should throw PaymillError with payment and different client', :vcr do
-        expect{ Transaction.create( payment: payment, amount: amount, currency: currency, client: Client.create() ) }.to raise_error PaymillError
+        expect{ Transaction.create( payment: @payment, amount: amount, currency: currency, client: Client.create() ) }.to raise_error PaymillError
       end
 
       it 'should throw ArgumentError when creating with token and payment', :vcr do
-        expect{ Transaction.create( token: token, payment: payment, currency: currency, amount: amount ) }.to raise_error ArgumentError
+        expect{ Transaction.create( token: @token, payment: @payment, currency: currency, amount: amount ) }.to raise_error ArgumentError
       end
 
       it 'should throw ArgumentError when creating with token and payment and preauthorization', :vcr do
-        expect{ Transaction.create( token: token, payment: payment, preauthorization: preauth, currency: currency, amount: amount ) }.to raise_error ArgumentError
+        expect{ Transaction.create( token: @token, payment: @payment, preauthorization: @preauth, currency: currency, amount: amount ) }.to raise_error ArgumentError
       end
     end
 
@@ -194,7 +203,7 @@ module Paymill
         expect( transaction.updated_at ).to be_a Time
         expect( transaction.response_code ).to be 20000
         expect( transaction.is_fraud ).to be false
-        expect( transaction.short_id ).to eq '7357.7357.7357'
+        expect( transaction.short_id ).to eq '0000.9999.0000'
         expect( transaction.fees ).to be_empty
         expect( transaction.invoices ).to be_empty
         expect( transaction.payment ).to be_a Payment

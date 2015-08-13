@@ -6,16 +6,26 @@ module Paymill
     let( :amount ) { 2990 }
     let( :currency ) { 'USD' }
     let( :interval ) { '1 MONTH' }
-    let( :token ) { '098f6bcd4621d373cade4e832627b4f6' }
     let( :client ) { Client.create( email: 'rocky.balboa@qaiware.com' ) }
-    let( :payment ) { Payment.create( token: token, client: client ) }
     let( :offer ) { Offer.create( amount: amount, currency: currency, interval: interval, name: 'Premium Stallion' ) }
 
     subscription_id = nil
 
     context '::create' do
+      before( :each ) do
+        uri = URI.parse("https://test-token.paymill.com?transaction.mode=CONNECTOR_TEST&channel.id=941569045353c8ac2a5689deb88871bb&jsonPFunction=paymilljstests&account.number=4111111111111111&account.expiry.month=12&account.expiry.year=2015&account.verification=123&account.holder=John%20Rambo&presentation.amount3D=3201&presentation.currency3D=EUR")
+        https = Net::HTTP.new(uri.host, uri.port)
+        https.use_ssl = true
+        request = Net::HTTP::Get.new(uri.request_uri)
+        request.basic_auth( ENV['PAYMILL_API_TEST_KEY'], "" )
+        response = https.request(request)
+        @token = response.body.match('tok_[a-z|0-9]+')[0]
+        @payment = Payment.create( token: @token, client: client.id )
+        @preauth = Preauthorization.create( payment: @payment, amount: amount, currency: currency, description: 'The Italian Stallion' )
+      end
+
       it 'should create subscription from offer', :vcr do
-        subscription = Subscription.create( offer: offer, payment: payment, client: client )
+        subscription = Subscription.create( offer: offer, payment: @payment, client: client )
 
         expect( subscription ).to be_a Subscription
 
@@ -35,7 +45,7 @@ module Paymill
         expect( subscription.created_at ).to be_a Time
         expect( subscription.updated_at ).to be_a Time
         expect( subscription.canceled_at ).to be_nil
-        expect( subscription.payment.id ).to eq payment.id
+        expect( subscription.payment.id ).to eq @payment.id
         expect( subscription.app_id ).to be_nil
         expect( subscription.is_canceled ).to be false
         expect( subscription.is_deleted ).to be false
@@ -44,15 +54,15 @@ module Paymill
       end
 
       it 'should throw ArgumentError when creating subscription without offer', :vcr do
-        expect{ Subscription.create( payment: payment ) }.to raise_error ArgumentError
+        expect{ Subscription.create( payment: @payment ) }.to raise_error ArgumentError
       end
 
       it 'should throw ArgumentError when creating subscription without interval', :vcr do
-        expect{ Subscription.create( payment: payment, amount: amount, currency: currency ) }.to raise_error ArgumentError
+        expect{ Subscription.create( payment: @payment, amount: amount, currency: currency ) }.to raise_error ArgumentError
       end
 
       it 'should create subscription without offer', :vcr do
-        subscription = Subscription.create( payment: payment, client: client, amount: amount, currency: currency, interval: interval )
+        subscription = Subscription.create( payment: @payment, client: client, amount: amount, currency: currency, interval: interval )
 
         expect( subscription ).to be_a Subscription
 
@@ -74,7 +84,7 @@ module Paymill
         expect( subscription.created_at ).to be_a Time
         expect( subscription.updated_at ).to be_a Time
         expect( subscription.canceled_at ).to be_nil
-        expect( subscription.payment.id ).to eq payment.id
+        expect( subscription.payment.id ).to eq @payment.id
         expect( subscription.app_id ).to be_nil
         expect( subscription.is_canceled ).to be false
         expect( subscription.is_deleted ).to be false
@@ -84,7 +94,7 @@ module Paymill
       end
 
       it 'should create subscription without offer and new payment', :vcr do
-        subscription = Subscription.create( payment: Payment.create( token: token), amount: amount, currency: currency, interval: interval )
+        subscription = Subscription.create( payment: Payment.create( token: @token), amount: amount, currency: currency, interval: interval )
 
         expect( subscription ).to be_a Subscription
 
@@ -106,7 +116,7 @@ module Paymill
         expect( subscription.created_at ).to be_a Time
         expect( subscription.updated_at ).to be_a Time
         expect( subscription.canceled_at ).to be_nil
-        expect( subscription.payment.id ).not_to eq payment.id
+        expect( subscription.payment.id ).not_to eq @payment.id
         expect( subscription.app_id ).to be_nil
         expect( subscription.is_canceled ).to be false
         expect( subscription.is_deleted ).to be false
@@ -148,7 +158,7 @@ module Paymill
       end
 
       it 'should create subscription without offer with name and period_of_validity and start_at', :vcr do
-        subscription = Subscription.create( payment: payment, amount: amount, currency: currency, interval: interval, name: 'Basic Stallion', period_of_validity: '2 YEAR', start_at: 2.days.from_now )
+        subscription = Subscription.create( payment: @payment, amount: amount, currency: currency, interval: interval, name: 'Basic Stallion', period_of_validity: '2 YEAR', start_at: 2.days.from_now )
         subscription_id = subscription.id
 
         expect( subscription ).to be_a Subscription
@@ -172,7 +182,7 @@ module Paymill
         expect( subscription.created_at ).to be_a Time
         expect( subscription.updated_at ).to be_a Time
         expect( subscription.canceled_at ).to be_nil
-        expect( subscription.payment.id ).to eq payment.id
+        expect( subscription.payment.id ).to eq @payment.id
         expect( subscription.app_id ).to be_nil
         expect( subscription.is_canceled ).to be false
         expect( subscription.is_deleted ).to be false
@@ -182,7 +192,7 @@ module Paymill
       end
 
       it 'should creaate subscription with offer and different values', :vcr do
-        subscription = Subscription.create( payment: payment, amount: 777, currency: 'EUR', interval: '1 WEEK', offer: offer )
+        subscription = Subscription.create( payment: @payment, amount: 777, currency: 'EUR', interval: '1 WEEK', offer: offer )
 
         expect( subscription ).to be_a Subscription
 
@@ -205,7 +215,7 @@ module Paymill
         expect( subscription.created_at ).to be_a Time
         expect( subscription.updated_at ).to be_a Time
         expect( subscription.canceled_at ).to be_nil
-        expect( subscription.payment.id ).to eq payment.id
+        expect( subscription.payment.id ).to eq @payment.id
         expect( subscription.app_id ).to be_nil
         expect( subscription.is_canceled ).to be false
         expect( subscription.is_deleted ).to be false
@@ -226,10 +236,22 @@ module Paymill
     end
 
     context '::update' do
-      it 'should update all "instance" attributes without the offer', :vcr do
-        subscription = Subscription.create( payment: payment, amount: amount, currency: currency, interval: interval, name: 'Basic Stallion', period_of_validity: '2 YEAR', start_at: 2.days.from_now )
+      before( :each ) do
+        uri = URI.parse("https://test-token.paymill.com?transaction.mode=CONNECTOR_TEST&channel.id=941569045353c8ac2a5689deb88871bb&jsonPFunction=paymilljstests&account.number=4111111111111111&account.expiry.month=12&account.expiry.year=2015&account.verification=123&account.holder=John%20Rambo&presentation.amount3D=3201&presentation.currency3D=EUR")
+        https = Net::HTTP.new(uri.host, uri.port)
+        https.use_ssl = true
+        request = Net::HTTP::Get.new(uri.request_uri)
+        request.basic_auth( ENV['PAYMILL_API_TEST_KEY'], "" )
+        response = https.request(request)
+        @token = response.body.match('tok_[a-z|0-9]+')[0]
+        @payment = Payment.create( token: @token, client: client.id )
+        @preauth = Preauthorization.create( payment: @payment, amount: amount, currency: currency, description: 'The Italian Stallion' )
+      end
 
-        subscription.payment = Payment.create( token: token, client: client )
+      it 'should update all "instance" attributes without the offer', :vcr do
+        subscription = Subscription.create( payment: @payment, amount: amount, currency: currency, interval: interval, name: 'Basic Stallion', period_of_validity: '2 YEAR', start_at: 2.days.from_now )
+
+        subscription.payment = Payment.create( token: @token, client: client )
         payment_id = subscription.payment.id
         subscription.currency = 'EUR'
         subscription.interval = '1 MONTH,FRIDAY'
@@ -270,7 +292,7 @@ module Paymill
       end
 
       it 'should change the amount of a subscription once', :vcr do
-        subscription = Subscription.create( payment: payment, offer: offer )
+        subscription = Subscription.create( payment: @payment, offer: offer )
 
         subscription.update_amount_once( 1717 )
 
@@ -334,7 +356,7 @@ module Paymill
       end
 
       it 'should change the offer of a subscription with no refund and unchanged capture date', :vcr do
-        subscription = Subscription.create( payment: payment, offer: offer )
+        subscription = Subscription.create( payment: @payment, offer: offer )
         new_offer = Offer.create( name: 'Foo', amount: 4990, currency: 'EUR', interval: '2 WEEK')
 
         subscription.update_offer_without_changes( new_offer )
@@ -367,7 +389,7 @@ module Paymill
       end
 
       it 'should change the offer of a subscription with refund and unchanged capture date', :vcr do
-        subscription = Subscription.create( payment: payment, offer: offer )
+        subscription = Subscription.create( payment: @payment, offer: offer )
         new_offer = Offer.create( name: 'Foo', amount: 1990, currency: 'EUR', interval: '2 WEEK')
 
         subscription.update_offer_with_refund( new_offer )
@@ -400,7 +422,7 @@ module Paymill
       end
 
       it 'should change the offer of a subscription with refund and capture date', :vcr do
-        subscription = Subscription.create( payment: payment, offer: offer )
+        subscription = Subscription.create( payment: @payment, offer: offer )
         new_offer = Offer.create( name: 'Foo', amount: 1990, currency: 'EUR', interval: '2 WEEK')
 
         subscription.update_offer_with_refund_and_capture_date( new_offer )
@@ -433,19 +455,19 @@ module Paymill
       end
 
       it 'should stops the trial period', :vcr do
-        subscription = Subscription.create( payment: payment, amount: amount, currency: currency, interval: interval, name: 'Bar', start_at: Time.new( 2016, 11, 17, 15, 0, 0 ).to_i )
+        subscription = Subscription.create( payment: @payment, amount: amount, currency: currency, interval: interval, name: 'Bar', start_at: Time.new( 2016, 11, 17, 15, 0, 0 ).to_i )
         next_capture_at = subscription.next_capture_at
         expect( subscription.trial_end.beginning_of_day ).to eq Time.new( 2016, 11, 17, 15, 0, 0 ).beginning_of_day
 
         subscription.stop_trial_period()
 
-        expect( subscription.trial_end ).to be_nil
+        expect( subscription.trial_end ).to eq subscription.updated_at
         expect( subscription.next_capture_at ).to be < next_capture_at
         expect( subscription.created_at ).to be < subscription.updated_at
       end
 
       it 'should unlimit-limit the validity of a subscription', :vcr do
-        subscription = Subscription.create( payment: payment, offer: offer, name: 'Baz', period_of_validity: '2 MONTH' )
+        subscription = Subscription.create( payment: @payment, offer: offer, name: 'Baz', period_of_validity: '2 MONTH' )
         expect( subscription.period_of_validity ).to eq '2 MONTH'
         expect( subscription.end_of_period ).not_to be_nil
 
@@ -460,7 +482,7 @@ module Paymill
       end
 
       it 'should pause-play a subscription', :vcr do
-        subscription = Subscription.create( payment: payment, offer: offer, name: 'To Delete' )
+        subscription = Subscription.create( payment: @payment, offer: offer, name: 'To Delete' )
         expect( subscription.period_of_validity ).to be_nil
         expect( subscription.end_of_period ).to be_nil
 
@@ -500,7 +522,7 @@ module Paymill
       end
 
       it "should update subscription's payment", :vcr do
-        new_payment = Payment.create( token: token, client: client )
+        new_payment = Payment.create( token: @token, client: client )
         subscription = Subscription.find( subscription_id )
         subscription.payment = new_payment
         subscription.update
@@ -511,8 +533,20 @@ module Paymill
     end
 
     context '::delete' do
+      before( :each ) do
+        uri = URI.parse("https://test-token.paymill.com?transaction.mode=CONNECTOR_TEST&channel.id=941569045353c8ac2a5689deb88871bb&jsonPFunction=paymilljstests&account.number=4111111111111111&account.expiry.month=12&account.expiry.year=2015&account.verification=123&account.holder=John%20Rambo&presentation.amount3D=3201&presentation.currency3D=EUR")
+        https = Net::HTTP.new(uri.host, uri.port)
+        https.use_ssl = true
+        request = Net::HTTP::Get.new(uri.request_uri)
+        request.basic_auth( ENV['PAYMILL_API_TEST_KEY'], "" )
+        response = https.request(request)
+        @token = response.body.match('tok_[a-z|0-9]+')[0]
+        @payment = Payment.create( token: @token, client: client.id )
+        @preauth = Preauthorization.create( payment: @payment, amount: amount, currency: currency, description: 'The Italian Stallion' )
+      end
+
       it 'should cancel the given subscription', :vcr do
-          subscription = Subscription.create( payment: payment, offer: offer, name: 'To Delete' ).cancel
+          subscription = Subscription.create( payment: @payment, offer: offer, name: 'To Delete' ).cancel
 
           expect( subscription.id ).to be_a String
           expect( subscription.offer.amount ).to be offer.amount
@@ -540,7 +574,7 @@ module Paymill
           expect( subscription.client.email ).to eq client.email
       end
       it 'should remove the given subscription', :vcr do
-        subscription = Subscription.create( payment: payment, offer: offer, name: 'To Delete' ).remove
+        subscription = Subscription.create( payment: @payment, offer: offer, name: 'To Delete' ).remove
 
         expect( subscription.id ).to be_a String
         expect( subscription.offer.amount ).to be offer.amount

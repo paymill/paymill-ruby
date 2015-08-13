@@ -22,13 +22,13 @@ module Paymill
       end
 
       it 'should create inactivated email hook', :vcr do
-        webhook = Webhook.create( email: 'rambo@qaiware.com', event_types: ['transaction.succeeded', 'transaction.failed'], active: false )
+        webhook = Webhook.create( email: 'rambo@qaiware.com', event_types: ['refund.failed'], active: false )
         inactive_webhook_id = webhook.id
 
         expect( webhook.id ).to be_a String
         expect( webhook.email ).to eq 'rambo@qaiware.com'
         expect( webhook.livemode ).to be false
-        expect( webhook.event_types ).to eq ['transaction.succeeded', 'transaction.failed']
+        expect( webhook.event_types ).to eq ['refund.failed']
         expect( webhook.created_at ).to be_a Time
         expect( webhook.updated_at ).to be_a Time
         expect( webhook.active ).to be false
@@ -50,7 +50,6 @@ module Paymill
       it 'should throw ArgumentError when creating without email or url', :vcr do
         expect{ Webhook.create( event_types: ['transaction.succeeded', 'transaction.failed'] ) }.to raise_error ArgumentError
       end
-
     end
 
     context '::find' do
@@ -76,13 +75,13 @@ module Paymill
       it 'should update type from url to email', :vcr do
         webhook = Webhook.find( active_webhook_id )
         id = webhook.to_s
-        webhook.email = 'rambo@qaiware.com'
 
+        webhook.email = 'rocky@qaiware.com'
         webhook.update
 
         expect( webhook.to_s ).to eq id
         expect( webhook.id ).to eq active_webhook_id
-        expect( webhook.email ).to eq 'rambo@qaiware.com'
+        expect( webhook.email ).to eq 'rocky@qaiware.com'
         expect( webhook.url ).to be_nil
         expect( webhook.livemode ).to be false
         expect( webhook.event_types ).to eq ['transaction.succeeded', 'transaction.failed']
@@ -95,13 +94,13 @@ module Paymill
 
       it 'should update type from email to url', :vcr do
         webhook = Webhook.find( active_webhook_id )
-        webhook.url = 'http://example.com'
+        webhook.url = 'https://qaiware.com'
 
         webhook.update
 
         expect( webhook.id ).to eq active_webhook_id
         expect( webhook.email ).to be_nil
-        expect( webhook.url ).to eq 'http://example.com'
+        expect( webhook.url ).to eq 'https://qaiware.com'
         expect( webhook.livemode ).to be false
         expect( webhook.event_types ).to eq ['transaction.succeeded', 'transaction.failed']
         expect( webhook.created_at ).to be_a Time
@@ -119,7 +118,7 @@ module Paymill
 
         expect( webhook.id ).to eq active_webhook_id
         expect( webhook.email ).to be_nil
-        expect( webhook.url ).to eq 'http://example.com'
+        expect( webhook.url ).to eq 'https://qaiware.com'
         expect( webhook.livemode ).to be false
         expect( webhook.event_types ).to eq ['transaction.succeeded', 'transaction.failed', 'transaction.created']
         expect( webhook.created_at ).to be_a Time
@@ -137,7 +136,7 @@ module Paymill
 
         expect( webhook.id ).to eq active_webhook_id
         expect( webhook.email ).to be_nil
-        expect( webhook.url ).to eq 'http://example.com'
+        expect( webhook.url ).to eq 'https://qaiware.com'
         expect( webhook.livemode ).to be false
         expect( webhook.event_types ).to eq ['transaction.succeeded', 'transaction.failed']
         expect( webhook.created_at ).to be_a Time
@@ -148,6 +147,7 @@ module Paymill
       end
 
       xit 'should deactivate the webhook', :vcr do
+        #TODO[VNi]: API can not deactivate a hook
         webhook = Webhook.find( active_webhook_id )
         webhook.active = false
 
@@ -155,7 +155,7 @@ module Paymill
 
         expect( webhook.id ).to eq active_webhook_id
         expect( webhook.email ).to be_nil
-        expect( webhook.url ).to eq 'http://example.com'
+        expect( webhook.url ).to eq 'https://qaiware.com'
         expect( webhook.livemode ).to be false
         expect( webhook.event_types ).to eq ['transaction.succeeded', 'transaction.failed']
         expect( webhook.created_at ).to be_a Time
@@ -175,7 +175,7 @@ module Paymill
         expect( webhook.email ).to eq 'rambo@qaiware.com'
         expect( webhook.url ).to be_nil
         expect( webhook.livemode ).to be false
-        expect( webhook.event_types ).to eq ['transaction.succeeded', 'transaction.failed']
+        expect( webhook.event_types ).to eq ['refund.failed']
         expect( webhook.created_at ).to be_a Time
         expect( webhook.updated_at ).to be_a Time
         expect( webhook.active ).to be true
@@ -186,6 +186,7 @@ module Paymill
       context '::deltele' do
         it 'showd delete existing webhook', :vcr do
           expect( Webhook.find( active_webhook_id ).delete ).to be_nil
+          expect( Webhook.find( inactive_webhook_id ).delete ).to be_nil
         end
       end
 

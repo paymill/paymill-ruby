@@ -46,6 +46,7 @@ module Paymill
     module Update
       def update( arguments = {} )
         arguments.merge! public_methods( false ).grep( /.*=/ ).map{ |m| m = m.id2name.chop; { m => send( m ) } }.reduce( :merge )
+
         response = Paymill.request( Http.put( self.class.name.demodulize.tableize, self.id, Restful.normalize( arguments ) ) )
         source = self.class.new( response['data'] )
         self.instance_variables.each { |key| self.instance_variable_set( key, source.instance_variable_get( key ) ) }

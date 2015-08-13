@@ -17,10 +17,10 @@ module Paymill
       end
 
       it 'should find a Client object when valid client id is given', :vcr do
-        client = Client.find( 'client_b54ff8b3811e06c02e14' )
+        client = Client.find( 'client_a6dcf82f63c3a5627454' )
 
         expect( client ).to be_a Client
-        expect( client.id ).to eq 'client_b54ff8b3811e06c02e14'
+        expect( client.id ).to eq 'client_a6dcf82f63c3a5627454'
         expect( client.email ).to eq 'john.rambo@qaiware.com'
         expect( client.description ).to eq 'Boom, boom, shake the room'
         expect( client.created_at ).to be_a Time
@@ -30,9 +30,9 @@ module Paymill
         expect( client.payments ).not_to be_nil
         expect( client.payments.first ).to be_a Payment
 
-        expect( client.payments.first.id ).to eq 'pay_ea98515b29437b046207ea45'
+        expect( client.payments.first.id ).to eq 'pay_e3d67dfaf30a237308d42bf2'
         expect( client.payments.first.type ).to eq 'creditcard'
-        expect( client.payments.first.client ).to eq 'client_b54ff8b3811e06c02e14'
+        expect( client.payments.first.client ).to eq 'client_a6dcf82f63c3a5627454'
         expect( client.payments.first.card_type ).to eq 'visa'
         expect( client.payments.first.country ).to be_nil
         expect( client.payments.first.expire_month ).to eq 12
@@ -49,73 +49,73 @@ module Paymill
         expect( client.subscriptions ).not_to be_nil
 
         expect( client.subscriptions.first ).to be_a Subscription
-        expect( client.subscriptions.first.id ).to eq 'sub_5e6e2bbe5176a5271f48'
-        expect( client.subscriptions.first.offer.id ).to eq 'offer_fcba97f1f6f9a6af2a4d'
-        expect( client.subscriptions.first.offer.name ).to eq 'Chuck Testa'
-        expect( client.subscriptions.first.offer.amount ).to be 900
+        expect( client.subscriptions.first.id ).to eq 'sub_386b863839a6c9f6c584'
+        expect( client.subscriptions.first.offer.id ).to eq 'offer_5c74768d4d854c9df2a1'
+        expect( client.subscriptions.first.offer.name ).to eq 'test1'
+        expect( client.subscriptions.first.offer.amount ).to be 2000
         expect( client.subscriptions.first.offer.currency ).to eq 'EUR'
-        expect( client.subscriptions.first.offer.interval ).to eq '1 MONTH'
-        expect( client.subscriptions.first.offer.trial_period_days ).to be 0
+        expect( client.subscriptions.first.offer.interval ).to eq '1 WEEK'
+        expect( client.subscriptions.first.offer.trial_period_days ).to be_nil
         expect( client.subscriptions.first.offer.created_at ).to be_a Time
         expect( client.subscriptions.first.offer.updated_at ).to be_a Time
-        expect( client.subscriptions.first.offer.subscription_count.active ).to be 0
-        expect( client.subscriptions.first.offer.subscription_count.inactive ).to be 1
+        expect( client.subscriptions.first.offer.subscription_count.active ).to be 1
+        expect( client.subscriptions.first.offer.subscription_count.inactive ).to be 0
         expect( client.subscriptions.first.offer.app_id ).to be_nil
         expect( client.subscriptions.first.livemode ).to be false
-        expect( client.subscriptions.first.amount ).to be 900
+        expect( client.subscriptions.first.amount ).to be 2000
         expect( client.subscriptions.first.temp_amount ).to be_nil
-        expect( client.subscriptions.first.currency ).to eq 'EUR'
-        expect( client.subscriptions.first.name ).to eq 'Chuck Testa'
-        expect( client.subscriptions.first.interval ).to eq '1 MONTH'
+        expect( client.subscriptions.first.currency ).to eq 'USD'
+        expect( client.subscriptions.first.name ).to eq 'test2'
+        expect( client.subscriptions.first.interval ).to eq '2 MONTH'
         expect( client.subscriptions.first.trial_start ).to be_nil
         expect( client.subscriptions.first.trial_end ).to be_nil
         expect( client.subscriptions.first.period_of_validity ).to be_nil
         expect( client.subscriptions.first.end_of_period ).to be_nil
-        expect( client.subscriptions.first.next_capture_at ).to be_nil
+        expect( client.subscriptions.first.next_capture_at ).to be_a Time
         expect( client.subscriptions.first.created_at ).to be_a Time
         expect( client.subscriptions.first.updated_at ).to be_a Time
-        expect( client.subscriptions.first.canceled_at ).to be_a Time
-        expect( client.subscriptions.first.payment ).to eq 'pay_ea98515b29437b046207ea45'
+        expect( client.subscriptions.first.canceled_at ).to be_nil
+        expect( client.subscriptions.first.payment ).to eq 'pay_f71c32615742beac11bf7b7c'
         expect( client.subscriptions.first.app_id ).to be_nil
-        expect( client.subscriptions.first.is_canceled ).to be true
+        expect( client.subscriptions.first.is_canceled ).to be false
         expect( client.subscriptions.first.is_deleted ).to be false
-        expect( client.subscriptions.first.status ).to eq 'inactive'
-        expect( client.subscriptions.first.client ).to eq 'client_b54ff8b3811e06c02e14'
+        expect( client.subscriptions.first.status ).to eq 'active'
+        expect( client.subscriptions.first.client ).to eq 'client_a6dcf82f63c3a5627454'
 
 
         expect( client.subscriptions.last ).to be_a Subscription
-        expect( client.subscriptions.last.id ).to eq 'sub_b519112c57579508d188'
-        expect( client.subscriptions.last.offer.id ).to eq 'offer_a71865bef8f9425b9740'
-        expect( client.subscriptions.last.offer.name ).to eq 'Updated Chuck Testa'
-        expect( client.subscriptions.last.offer.amount ).to be 1800
+        expect( client.subscriptions.last.id ).to eq 'sub_386b863839a6c9f6c584'
+        expect( client.subscriptions.last.offer.id ).to eq 'offer_5c74768d4d854c9df2a1'
+        expect( client.subscriptions.last.offer.name ).to eq 'test1'
+        expect( client.subscriptions.last.offer.amount ).to be 2000
         expect( client.subscriptions.last.offer.currency ).to eq 'EUR'
-        expect( client.subscriptions.last.offer.interval ).to eq '1 MONTH'
-        expect( client.subscriptions.last.offer.trial_period_days ).to be 0
+        expect( client.subscriptions.last.offer.interval ).to eq '1 WEEK'
+        expect( client.subscriptions.last.offer.trial_period_days ).to be_nil
         expect( client.subscriptions.last.offer.created_at ).to be_a Time
         expect( client.subscriptions.last.offer.updated_at ).to be_a Time
-        expect( client.subscriptions.last.offer.subscription_count.active ).to be 0
-        expect( client.subscriptions.last.offer.subscription_count.inactive ).to be 1
+        expect( client.subscriptions.last.offer.subscription_count.active ).to be 1
+        expect( client.subscriptions.last.offer.subscription_count.inactive ).to be 0
         expect( client.subscriptions.last.offer.app_id ).to be_nil
         expect( client.subscriptions.last.livemode ).to be false
-        expect( client.subscriptions.last.amount ).to be 1800
+        expect( client.subscriptions.last.amount ).to be 2000
         expect( client.subscriptions.last.temp_amount ).to be_nil
-        expect( client.subscriptions.last.currency ).to eq 'EUR'
-        expect( client.subscriptions.last.name ).to eq 'Updated Chuck Testa'
-        expect( client.subscriptions.last.interval ).to eq '1 MONTH'
+        expect( client.subscriptions.last.currency ).to eq 'USD'
+        expect( client.subscriptions.last.name ).to eq 'test2'
+        expect( client.subscriptions.last.interval ).to eq '2 MONTH'
         expect( client.subscriptions.last.trial_start ).to be_nil
         expect( client.subscriptions.last.trial_end ).to be_nil
         expect( client.subscriptions.last.period_of_validity ).to be_nil
         expect( client.subscriptions.last.end_of_period ).to be_nil
-        expect( client.subscriptions.last.next_capture_at ).to be_nil
+        expect( client.subscriptions.last.next_capture_at ).to be_a Time
         expect( client.subscriptions.last.created_at ).to be_a Time
         expect( client.subscriptions.last.updated_at ).to be_a Time
-        expect( client.subscriptions.last.canceled_at ).to be_a Time
-        expect( client.subscriptions.last.payment ).to eq 'pay_ea98515b29437b046207ea45'
+        expect( client.subscriptions.last.canceled_at ).to be_nil
+        expect( client.subscriptions.last.payment ).to eq 'pay_f71c32615742beac11bf7b7c'
         expect( client.subscriptions.last.app_id ).to be_nil
-        expect( client.subscriptions.last.is_canceled ).to be true
+        expect( client.subscriptions.last.is_canceled ).to be false
         expect( client.subscriptions.last.is_deleted ).to be false
-        expect( client.subscriptions.last.status ).to eq 'inactive'
-        expect( client.subscriptions.last.client ).to eq 'client_b54ff8b3811e06c02e14'
+        expect( client.subscriptions.last.status ).to eq 'active'
+        expect( client.subscriptions.last.client ).to eq 'client_a6dcf82f63c3a5627454'
       end
     end
 
@@ -274,8 +274,8 @@ module Paymill
       end
 
       it 'should get all clients with sorting and filters', :vcr do
-        # 2014-11-12 23:38:00 to 2014-11-13 23:38:00
-        clients = Client.all( order: [:email_asc], filters: [created_at: "1415828227-1415914686"] )
+        # 2015-07-08 00:43:14 to 2015-07-14 23:23:14
+        clients = Client.all( order: [:email_asc], filters: [created_at: "1436316194-1436916194"] )
 
         expect( clients ).to be_a Array
         expect( clients ).to respond_to :data_count

@@ -7,18 +7,18 @@ module Paymill
 
     context '::find' do
       it 'should find a Offer object when valid offer id is given', :vcr do
-        offer = Offer.find( 'offer_fcba97f1f6f9a6af2a4d' )
+        offer = Offer.find( 'offer_9bba76a5e8bca1407230' )
 
-        expect( offer.id ).to eq 'offer_fcba97f1f6f9a6af2a4d'
+        expect( offer.id ).to eq 'offer_9bba76a5e8bca1407230'
         expect( offer.name ).to eq 'Chuck Testa'
-        expect( offer.amount ).to be 900
+        expect( offer.amount ).to be 10000
         expect( offer.currency ).to eq 'EUR'
         expect( offer.interval ).to eq '1 MONTH'
         expect( offer.trial_period_days ).to be 0
         expect( offer.created_at ).to be_a Time
         expect( offer.updated_at ).to be_a Time
         expect( offer.subscription_count.active ).to be 0
-        expect( offer.subscription_count.inactive ).to be 1
+        expect( offer.subscription_count.inactive ).to be 0
         expect( offer.app_id ).to be_nil
       end
 

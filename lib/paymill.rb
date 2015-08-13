@@ -1,8 +1,5 @@
 require 'json'
 require 'net/https'
-require 'active_support/time'
-require 'active_support/core_ext/string'
-require 'active_support/core_ext/numeric/time'
 require "paymill/version"
 require 'paymill/errors'
 require 'paymill/restful/methods'

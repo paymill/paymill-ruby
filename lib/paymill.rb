@@ -8,7 +8,9 @@ module Paymill
   API_VERSION   = 'v2.1'
   API_BASE      = 'api.paymill.com'
 
+  autoload :Address,              'paymill/models/address'
   autoload :Base,                 'paymill/models/base'
+  autoload :Checksum,             'paymill/models/checksum'
   autoload :Client,               'paymill/models/client'
   autoload :Fee,                  'paymill/models/fee'
   autoload :Invoice,              'paymill/models/invoice'
@@ -18,6 +20,7 @@ module Paymill
   autoload :PaymentMethod,        'paymill/models/payment_method'
   autoload :Preauthorization,     'paymill/models/preauthorization'
   autoload :Refund,               'paymill/models/refund.rb'
+  autoload :ShoppingCartItem,     'paymill/models/shopping_cart_item'
   autoload :Subscription,         'paymill/models/subscription'
   autoload :SubscriptionCount,    'paymill/models/subscription_count'
   autoload :Transaction,          'paymill/models/transaction'
@@ -45,7 +48,6 @@ module Paymill
     end
 
     raise PaymillError, response.body unless response.class.eql? Net::HTTPOK
-
     JSON.parse( response.body )
   end
 

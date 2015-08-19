@@ -7,6 +7,11 @@ module Paymill
     attr_reader :payments, :subscriptions
 
     protected
+    def self.create_with?( incoming_arguments )
+      return false if mandatory_arguments.select { |a| incoming_arguments.include? a }.size < mandatory_arguments.size
+      allowed_arguments.size == ( allowed_arguments | incoming_arguments ).size
+    end
+
     def self.allowed_arguments
       [:email, :description]
     end

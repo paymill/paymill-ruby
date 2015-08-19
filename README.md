@@ -169,6 +169,16 @@ refund = Refund.create( transaction, amount: 100 )
 Subscription
 ------------
 
+Changelog
+=========
+
+### 1.0.0
+* fix [issue #6](https://github.com/paymill/paymill-ruby/issues/6) Add new parameter mandate_reference
+* fix [issue #7](https://github.com/paymill/paymill-ruby/issues/7) ActiveSupport 4.1 requirement
+* fix [issue #8](https://github.com/paymill/paymill-ruby/issues/8) No access to iban and bic
+* fix [issue #9](https://github.com/paymill/paymill-ruby/issues/9) Add explanation on how to run the spec
+* Add Checksum, Address and ShoppingCartItem object
+
 Contributing
 ============
 

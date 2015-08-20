@@ -11,7 +11,7 @@ module Paymill
     def deserialize( json )
       case value.class.name
       when 'Array'
-        instance_variable_set( "@#{key.pluralize}", value.map { |e| e } )
+        instance_variable_set( "@#{key}s", value.map { |e| e } )
       else
         instance_variable_set( "@#{key}", (Integer( value ) rescue value) )
       end

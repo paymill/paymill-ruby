@@ -10,9 +10,9 @@ Ruby wrapper for PAYMILL API forked from [dkd's paymill-ruby](https://github.com
 Getting started
 ===============
 
--	If you are not familiar with PAYMILL, start with the [documentation](https://www.paymill.com/en-gb/documentation-3/).
+-	If you are not familiar with PAYMILL, start with the [documentation](https://developers.paymill.com).
 -	Install the latest release.
--	Check the API [reference](https://www.paymill.com/en-gb/documentation-3/reference/api-reference/).
+-	Check the API [reference](https://developers.paymill.com/API/).
 -	Check the specification examples.
 -	Take a look at the [change log](./CHANGELOG.md) for recent updates and improvements.
 
@@ -199,16 +199,6 @@ Checksum.create( checksum_type: 'paypal', amount: 9700, currency: 'EUR', descrip
 ```ruby
 Checksum.create( checksum_type: 'paypal', amount: 9700, currency: 'EUR', description: 'Chuck Testa', return_url: 'https://testa.com', cancel_url: 'https://test.com/cancel', fee_amount: 100, fee_payment: 'pay_3af44644dd6d25c820a8', fee_currency: 'EUR', app_id: '8fh98hfd828ej2e09dk0hf9' )
 ```
-
-Changelog
-=========
-
-### 1.0.2
-* fix [issue #6](https://github.com/paymill/paymill-ruby/issues/6) Add new parameter mandate_reference
-* fix [issue #7](https://github.com/paymill/paymill-ruby/issues/7) ActiveSupport 4.1 requirement
-* fix [issue #8](https://github.com/paymill/paymill-ruby/issues/8) No access to iban and bic
-* fix [issue #9](https://github.com/paymill/paymill-ruby/issues/9) Add explanation on how to run the spec
-* Add Checksum, Address and ShoppingCartItem objects for paypal payments.
 
 Contributing
 ============

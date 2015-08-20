@@ -59,6 +59,19 @@ module Paymill
         expect( checksum.updated_at ).to be_a Time
       end
 
+      it 'should create new checksum with minimum parameters and fee', :vcr do
+        checksum = Checksum.create( checksum_type: 'paypal', amount: 9700, currency: 'EUR', description: 'Chuck Testa', return_url: 'https://testa.com', cancel_url: 'https://test.com/cancel', fee_amount: 100, fee_payment: 'pay_3af44644dd6d25c820a8', fee_currency: 'EUR', app_id: '8fh98hfd828ej2e09dk0hf9' )
+
+        expect( checksum.action ).to eq 'transaction'
+        expect( checksum.checksum ).to be_a String
+        expect( checksum.data ).to eq 'amount=9700&currency=EUR&description=Chuck+Testa&return_url=https%3A%2F%2Ftesta.com&cancel_url=https%3A%2F%2Ftest.com%2Fcancel&fee_amount=100&fee_payment=pay_3af44644dd6d25c820a8&fee_currency=EUR&app_id=8fh98hfd828ej2e09dk0hf9'
+        expect( checksum.id ).to be_a String
+        expect( checksum.type ).to eq 'paypal'
+        expect( checksum.app_id ).to be_nil
+        expect( checksum.created_at ).to be_a Time
+        expect( checksum.updated_at ).to be_a Time
+      end
+
     end
   end
 end

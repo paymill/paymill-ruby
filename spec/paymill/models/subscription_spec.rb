@@ -294,7 +294,7 @@ module Paymill
 
       it 'should change the amount of a subscription once', :vcr do
         subscription = Subscription.create( payment: @payment, offer: offer )
-
+        sleep 1
         subscription.update_amount_once( 1717 )
 
         expect( subscription.id ).to be_a String

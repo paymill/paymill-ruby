@@ -166,8 +166,35 @@ transaction = Transaction.create( token: '098f6bcd4621d373cade4e832627b4f6', amo
 refund = Refund.create( transaction, amount: 100 )
 ```
 
-Subscription
-------------
+Checksum
+--------
+
+#### Creating plain checksum
+
+```ruby
+Checksum.create( checksum_type: 'paypal', amount: 4200, currency: 'EUR', description: 'Chuck Testa', return_url: 'https://testa.com', cancel_url: 'https://test.com/cancel' )
+```
+
+#### Creating checksum with address
+
+```ruby
+billing_address = Address.new( name: 'Primary', street_address: 'Rambo Str.', street_address_addition: '', city: 'Sofia', state: 'Sofia', postal_code: 1234, country: 'BG', phone: '088 41 555 27' )
+Checksum.create( checksum_type: 'paypal', amount: 4200, currency: 'EUR', description: 'Chuck Testa', return_url: 'https://testa.com', cancel_url: 'https://test.com/cancel', billing_address: billing_address )
+```
+
+#### Creating checksum with items
+
+```ruby
+rambo_poster = ShoppingCartItem.new( name: "Rambo Poster", description: "John J. Rambo", amount: 2200, quantity: 3, item_number: "898-24342-343", url: "http://www.store.com/items/posters/12121-rambo" )
+comando_poster = ShoppingCartItem.new( name: "Comando Poster", description: "John Matrix", amount: 3100, quantity: 1, item_number: "898-24342-341", url: "http://www.store.com/items/posters/12121-comando" )
+Checksum.create( checksum_type: 'paypal', amount: 9700, currency: 'EUR', description: 'Chuck Testa', return_url: 'https://testa.com', cancel_url: 'https://test.com/cancel', items: [rambo_poster, comando_poster] )
+```
+
+#### Creating checksum with fee
+
+```ruby
+Checksum.create( checksum_type: 'paypal', amount: 9700, currency: 'EUR', description: 'Chuck Testa', return_url: 'https://testa.com', cancel_url: 'https://test.com/cancel', fee_amount: 100, fee_payment: 'pay_3af44644dd6d25c820a8', fee_currency: 'EUR', app_id: '8fh98hfd828ej2e09dk0hf9' )
+```
 
 Changelog
 =========
@@ -177,7 +204,7 @@ Changelog
 * fix [issue #7](https://github.com/paymill/paymill-ruby/issues/7) ActiveSupport 4.1 requirement
 * fix [issue #8](https://github.com/paymill/paymill-ruby/issues/8) No access to iban and bic
 * fix [issue #9](https://github.com/paymill/paymill-ruby/issues/9) Add explanation on how to run the spec
-* Add Checksum, Address and ShoppingCartItem object
+* Add Checksum, Address and ShoppingCartItem objects for paypal payments.
 
 Contributing
 ============

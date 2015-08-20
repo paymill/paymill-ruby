@@ -16,7 +16,7 @@ module Paymill
     end
 
     def self.allowed_arguments
-      [:checksum_type, :amount, :currency, :description, :return_url, :cancel_url, :items, :shipping_address, :billing_address, :fee_amount, :fee_payment, :fee_currency]
+      [:checksum_type, :amount, :currency, :description, :return_url, :cancel_url, :items, :shipping_address, :billing_address, :fee_amount, :fee_payment, :fee_currency, :app_id]
     end
 
     def self.mandatory_arguments

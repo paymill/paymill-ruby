@@ -173,6 +173,8 @@ refund = Refund.create( transaction, amount: 100 )
 Checksum
 --------
 
+For transactions that are started client-side, e.g. PayPal checkout, it is required to first create a checksum on your server and then provide that checksum when starting the transaction in the browser. The checksum needs to contain all data required to subsequently create the actual transaction. In the examples below checksum is created with address, Shopping cart item and fee. Of course you can use all variations from this parameters to fit your needs.
+
 #### Creating plain checksum
 
 ```ruby

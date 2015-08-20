@@ -22,7 +22,7 @@ Installation
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'paymill', git: 'git://github.com/paymill/paymill-ruby.git'
+gem 'paymill_ruby', '~> 1.0'
 ```
 
 And then execute:
@@ -39,12 +39,16 @@ Usage
 Initialize the library by providing your api key:
 
 ```ruby
+require 'paymill'
+
 Paymill.api_key = '<YOUR PRIVATE API KEY>'
 ```
 
 or by reading it from the envirounment variables
 
 ```ruby
+require 'paymill'
+
 Paymill.api_key = ENV['PAYMILL_API_TEST_KEY']
 ```
 

@@ -13,7 +13,7 @@ module Paymill
           arguments = ''
         end
 
-        response = Paymill.request( Http.all( name.demodulize.tableize, arguments ) )
+        response = Paymill.request( Http.all( Restful.demodulize_and_tableize( name ), arguments ) )
         enrich_array_with_data_count( response['data'].map!{ |element| new( element ) }, response['data_count'] )
       end
 
@@ -30,7 +30,7 @@ module Paymill
     module Find
       def find( model )
         model = model.id if model.is_a? self
-        response = Paymill.request( Http.get( name.demodulize.tableize, model ) )
+        response = Paymill.request( Http.get( Restful.demodulize_and_tableize( name ), model ) )
         new( response['data'] )
       end
     end
@@ -38,7 +38,7 @@ module Paymill
     module Create
       def create( arguments = {} )
         raise ArgumentError unless create_with?( arguments.keys )
-        response = Paymill.request( Http.post( name.demodulize.tableize, Restful.normalize( arguments ) ) )
+        response = Paymill.request( Http.post( Restful.demodulize_and_tableize( name ), Restful.normalize( arguments ) ) )
         new( response['data'] )
       end
     end
@@ -47,7 +47,7 @@ module Paymill
       def update( arguments = {} )
         arguments.merge! public_methods( false ).grep( /.*=/ ).map{ |m| m = m.id2name.chop; { m => send( m ) } }.reduce( :merge )
 
-        response = Paymill.request( Http.put( self.class.name.demodulize.tableize, self.id, Restful.normalize( arguments ) ) )
+        response = Paymill.request( Http.put( Restful.demodulize_and_tableize( self.class.name ), self.id, Restful.normalize( arguments ) ) )
         source = self.class.new( response['data'] )
         self.instance_variables.each { |key| self.instance_variable_set( key, source.instance_variable_get( key ) ) }
       end
@@ -55,13 +55,17 @@ module Paymill
 
     module Delete
       def delete( arguments = {} )
-        response = Paymill.request( Http.delete( self.class.name.demodulize.tableize, self.id, arguments ) )
+        response = Paymill.request( Http.delete( Restful.demodulize_and_tableize( self.class.name ), self.id, arguments ) )
         return self.class.new( response['data'] ) if self.class.name.eql? 'Paymill::Subscription'
         nil
       end
     end
 
     private
+    def self.demodulize_and_tableize( name )
+      "#{name.split('::').last.downcase}s"
+    end
+
     def self.normalize( parameters = {} )
       attributes = {}.compare_by_identity
       parameters.each do |key, value|

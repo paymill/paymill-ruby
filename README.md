@@ -3,7 +3,7 @@
 paymill-ruby
 ============
 
-Ruby wrapper for PAYMILL API forked by [dkd's paymill-ruby](https://github.com/dkd/paymill-ruby)
+Ruby wrapper for PAYMILL API forked from [dkd's paymill-ruby](https://github.com/dkd/paymill-ruby)
 
 [![Build Status](https://travis-ci.org/paymill/paymill-ruby.svg)](https://travis-ci.org/paymill/paymill-ruby) [![Code Climate](https://codeclimate.com/github/paymill/paymill-ruby/badges/gpa.svg)](https://codeclimate.com/github/paymill/paymill-ruby)
 
@@ -31,7 +31,7 @@ And then execute:
 $ bundle
 ```
 
-The paymill gem is tested on Ruby 1.9.3, 2.0.0, 2.1.0, 2.1.3 and 2.1.5. It requires ruby version 1.9.3+
+The paymill gem is tested on Ruby 2.0.0, 2.1.x and 2.2.x. It requires ruby version 1.9.3+
 
 Usage
 =====
@@ -203,7 +203,7 @@ Checksum.create( checksum_type: 'paypal', amount: 9700, currency: 'EUR', descrip
 Changelog
 =========
 
-### 1.0.0
+### 1.0.2
 * fix [issue #6](https://github.com/paymill/paymill-ruby/issues/6) Add new parameter mandate_reference
 * fix [issue #7](https://github.com/paymill/paymill-ruby/issues/7) ActiveSupport 4.1 requirement
 * fix [issue #8](https://github.com/paymill/paymill-ruby/issues/8) No access to iban and bic

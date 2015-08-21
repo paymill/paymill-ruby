@@ -31,7 +31,7 @@ And then execute:
 $ bundle
 ```
 
-The paymill gem is tested on Ruby 2.0.0, 2.1.x and 2.2.x. It requires ruby version 1.9.3+
+The paymill gem is tested on Ruby 2.0.0, 2.1.x and 2.2.x. It requires ruby version 2.0 and up.
 
 Usage
 =====

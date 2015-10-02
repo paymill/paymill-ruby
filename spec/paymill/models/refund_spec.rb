@@ -77,7 +77,7 @@ module Paymill
         expect( refund.livemode ).to be false
         expect( refund.created_at ).to be_a Time
         expect( refund.updated_at ).to be_a Time
-        expect( refund.response_code ).to be 20000
+        expect( refund.response_code ).to eq '20000'
         expect( refund.transaction ).not_to be_nil
         expect( refund.app_id ).to be_nil
       end

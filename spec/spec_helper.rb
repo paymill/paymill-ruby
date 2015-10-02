@@ -5,7 +5,7 @@ require 'active_support/all'
 require 'uri'
 
 # initialize the library by getting paymill's api key from the envirounent variables
-Paymill.api_key = ENV['PAYMILL_API_TEST_KEY']
+Paymill.api_key = ENV['PAYMILL_API_TEST_PRIVATE_KEY']
 
 # VCR basic configuration
 VCR.configure do |config|
@@ -14,7 +14,8 @@ VCR.configure do |config|
   config.hook_into :webmock
   config.default_cassette_options = { record: :new_episodes, re_record_interval: 1.week.to_i }
   config.configure_rspec_metadata!
-  config.filter_sensitive_data( '<PAYMILL_API_TEST_KEY>' ) { ENV['PAYMILL_API_TEST_KEY'] }
+  config.filter_sensitive_data( '<PAYMILL_API_TEST_PRIVATE_KEY>' ) { ENV['PAYMILL_API_TEST_PRIVATE_KEY'] }
+  config.filter_sensitive_data( '<PAYMILL_API_TEST_PUBLIC_KEY>' ) { ENV['PAYMILL_API_TEST_PUBLIC_KEY'] }
 end
 
 # RSpec configuration

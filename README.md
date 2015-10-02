@@ -49,7 +49,7 @@ or by reading it from the envirounment variables
 ```ruby
 require 'paymill'
 
-Paymill.api_key = ENV['PAYMILL_API_TEST_KEY']
+Paymill.api_key = ENV['PAYMILL_API_TEST_PRIVATE_KEY']
 ```
 
 Clients
@@ -208,8 +208,9 @@ Contributing
 1.	Fork it ( https://github.com/paymill/paymill-ruby/fork )
 2.	Create your feature branch (`git checkout -b my-new-feature`)
 3.	Setup the project (`bundle install`)
-4.	Setup PAYMILL's test key in your environment (`export PAYMILL_API_TEST_KEY="<YOUR_TEST_KEY>"`)
-5.	Run all the tests (`rspec .)` or a subset from them (`rspec ./spec/paymill/models/client_spec.rb`)
-6.	Commit your changes (`git commit -am 'Add some feature'`)
-7.	Push to the branch (`git push origin my-new-feature`)
-8.	Create a new Pull Request
+4.	Setup PAYMILL's private test key in your environment (`export PAYMILL_API_TEST_PRIVATE_KEY="<YOUR_TEST_KEY>"`)
+5.	Setup PAYMILL's public test key in your environment (`export PAYMILL_API_TEST_PUBLIC_KEY="<YOUR_TEST_KEY>"`)
+6.	Run all the tests (`rspec .)` or a subset from them (`rspec ./spec/paymill/models/client_spec.rb`)
+7.	Commit your changes (`git commit -am 'Add some feature'`)
+8.	Push to the branch (`git push origin my-new-feature`)
+9.	Create a new Pull Request

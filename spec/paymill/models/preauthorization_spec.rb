@@ -11,11 +11,11 @@ module Paymill
 
     context '::create' do
       before( :each ) do
-        uri = URI.parse("https://test-token.paymill.com?transaction.mode=CONNECTOR_TEST&channel.id=941569045353c8ac2a5689deb88871bb&jsonPFunction=paymilljstests&account.number=4111111111111111&account.expiry.month=12&account.expiry.year=2015&account.verification=123&account.holder=John%20Rambo&presentation.amount3D=3201&presentation.currency3D=EUR")
+        uri = URI.parse("https://test-token.paymill.com?transaction.mode=CONNECTOR_TEST&channel.id=#{ENV['PAYMILL_API_TEST_PUBLIC_KEY']}&jsonPFunction=paymilljstests&account.number=4111111111111111&account.expiry.month=12&account.expiry.year=2015&account.verification=123&account.holder=John%20Rambo&presentation.amount3D=3201&presentation.currency3D=EUR")
         https = Net::HTTP.new(uri.host, uri.port)
         https.use_ssl = true
         request = Net::HTTP::Get.new(uri.request_uri)
-        request.basic_auth( ENV['PAYMILL_API_TEST_KEY'], "" )
+        request.basic_auth( ENV['PAYMILL_API_TEST_PRIVATE_KEY'], "" )
         response = https.request(request)
         @token = response.body.match('tok_[a-z|0-9]+')[0]
         @payment = Payment.create( token: @token, client: client.id )

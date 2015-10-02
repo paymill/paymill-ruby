@@ -5,28 +5,6 @@ module Paymill
 
     offer_id = nil
 
-    context '::find' do
-      it 'should find a Offer object when valid offer id is given', :vcr do
-        offer = Offer.find( 'offer_9bba76a5e8bca1407230' )
-
-        expect( offer.id ).to eq 'offer_9bba76a5e8bca1407230'
-        expect( offer.name ).to eq 'Chuck Testa'
-        expect( offer.amount ).to be 10000
-        expect( offer.currency ).to eq 'EUR'
-        expect( offer.interval ).to eq '1 MONTH'
-        expect( offer.trial_period_days ).to be 0
-        expect( offer.created_at ).to be_a Time
-        expect( offer.updated_at ).to be_a Time
-        expect( offer.subscription_count.active ).to be 0
-        expect( offer.subscription_count.inactive ).to be 0
-        expect( offer.app_id ).to be_nil
-      end
-
-      it 'should throw NotFoundError when unexisting offer id given', :vcr do
-        expect{ Offer.find( 'fake_id' ) }.to raise_error PaymillError
-      end
-    end
-
     context '::create' do
       it 'should create new offer without trial period in days', :vcr do
         offer = Offer.create( amount: 4200, currency: 'EUR', interval: '1 MONTH', name: 'Superabo' )
@@ -71,6 +49,28 @@ module Paymill
 
       it 'should throw PaymillError when creating with wrong currency argument value', :vcr do
         expect{ Offer.create( amount: 333, currency: 'ER', interval: '1 MONTH', name: 'Superabo' ) }.to raise_error PaymillError
+      end
+    end
+
+    context '::find' do
+      it 'should find a Offer object when valid offer id is given', :vcr do
+        offer = Offer.find( offer_id )
+
+        expect( offer.id ).to eq offer_id
+        expect( offer.name ).to eq 'sabo'
+        expect( offer.amount ).to be 4200
+        expect( offer.currency ).to eq 'EUR'
+        expect( offer.interval ).to eq '1 MONTH'
+        expect( offer.trial_period_days ).to be 30
+        expect( offer.created_at ).to be_a Time
+        expect( offer.updated_at ).to be_a Time
+        expect( offer.subscription_count.active ).to be 0
+        expect( offer.subscription_count.inactive ).to be 0
+        expect( offer.app_id ).to be_nil
+      end
+
+      it 'should throw NotFoundError when unexisting offer id given', :vcr do
+        expect{ Offer.find( 'fake_id' ) }.to raise_error PaymillError
       end
     end
 

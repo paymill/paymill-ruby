@@ -22,7 +22,7 @@ Installation
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'paymill_ruby', '~> 1.0', require: 'paymill'
+gem 'paymill_ruby', '~> 2.0', require: 'paymill'
 ```
 
 And then execute:

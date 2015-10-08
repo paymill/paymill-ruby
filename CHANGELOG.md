@@ -1,4 +1,4 @@
-### v1.0.2
+### v1.0.3
 * add [PR #21](https://github.com/paymill/paymill-ruby/pull/21) Do not try to cast every value of JSON to integer, thanks to [@morgoth](https://github.com/morgoth)
 
 ### v1.0.2

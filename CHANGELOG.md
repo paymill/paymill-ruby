@@ -1,4 +1,7 @@
 ### v1.0.2
+* add [PR #21](https://github.com/paymill/paymill-ruby/pull/21) Do not try to cast every value of JSON to integer, thanks to [@morgoth](https://github.com/morgoth)
+
+### v1.0.2
 * fix [issue #6](https://github.com/paymill/paymill-ruby/issues/6) Add new parameter mandate_reference
 * fix [issue #7](https://github.com/paymill/paymill-ruby/issues/7) ActiveSupport 4.1 requirement
 * fix [issue #8](https://github.com/paymill/paymill-ruby/issues/8) No access to iban and bic

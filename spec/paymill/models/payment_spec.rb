@@ -30,10 +30,10 @@ module Paymill
           expect( payment.card_type ). to eq 'visa'
 
           expect( payment.country ).to be_nil
-          expect( payment.expire_month ).to be 12
-          expect( payment.expire_year ).to be 2015
+          expect( payment.expire_month ).to eq '12'
+          expect( payment.expire_year ).to eq '2015'
           expect( payment.card_holder ).to eq 'Max Mustermann'
-          expect( payment.last4 ).to eq 1111
+          expect( payment.last4 ).to eq '1111'
           expect( payment.is_recurring ).to be true
           expect( payment.is_usable_for_preauthorization ).to be true
 
@@ -54,10 +54,10 @@ module Paymill
           expect( payment.card_type ).to eq 'visa'
 
           expect( payment.country ).to be_nil
-          expect( payment.expire_month ).to eq 12
-          expect( payment.expire_year ).to eq 2015
+          expect( payment.expire_month ).to eq '12'
+          expect( payment.expire_year ).to eq '2015'
           expect( payment.card_holder ).to eq 'Max Mustermann'
-          expect( payment.last4 ).to eq 1111
+          expect( payment.last4 ).to eq '1111'
           expect( payment.is_recurring ).to be true
           expect( payment.is_usable_for_preauthorization ).to be true
 
@@ -101,10 +101,10 @@ module Paymill
           expect( payment.card_type ). to eq 'visa'
 
           expect( payment.country ).to be nil
-          expect( payment.expire_month ).to eq 12
-          expect( payment.expire_year ).to eq 2015
+          expect( payment.expire_month ).to eq '12'
+          expect( payment.expire_year ).to eq '2015'
           expect( payment.card_holder ).to eq 'Max Mustermann'
-          expect( payment.last4 ).to eq 1111
+          expect( payment.last4 ).to eq '1111'
           expect( payment.is_recurring ).to be true
           expect( payment.is_usable_for_preauthorization ).to be true
 

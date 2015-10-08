@@ -36,7 +36,7 @@ module Paymill
         when 'Hash'
           instance_variable_set( "@#{key}", objectize( key, value ) )
         else
-          instance_variable_set( "@#{key}", (Integer( value ) rescue value) )
+          instance_variable_set( "@#{key}", value )
         end
       end
     end

@@ -67,7 +67,7 @@ module Paymill
         expect( subscription ).to be_a Subscription
 
         expect( subscription.id ).to be_a String
-        expect( subscription.offer.amount ).to be amount
+        expect( subscription.offer.amount ).to eq amount.to_s # bug in API
         expect( subscription.offer.currency ).to eq currency
         expect( subscription.offer.interval ).to eq interval
         expect( subscription.livemode ).to be false
@@ -99,7 +99,7 @@ module Paymill
         expect( subscription ).to be_a Subscription
 
         expect( subscription.id ).to be_a String
-        expect( subscription.offer.amount ).to be amount
+        expect( subscription.offer.amount ).to eq amount.to_s # bug in API
         expect( subscription.offer.currency ).to eq currency
         expect( subscription.offer.interval ).to eq interval
         expect( subscription.livemode ).to be false
@@ -165,7 +165,7 @@ module Paymill
 
         expect( subscription.id ).to be_a String
         expect( subscription.mandate_reference ).to eq 'Terminator'
-        expect( subscription.offer.amount ).to be amount
+        expect( subscription.offer.amount ).to eq amount.to_s # bug in API
         expect( subscription.offer.currency ).to eq currency
         expect( subscription.offer.interval ).to eq interval
         expect( subscription.offer.name ).to eq 'Basic Stallion'
@@ -363,12 +363,12 @@ module Paymill
         subscription.update_offer_without_changes( new_offer )
 
         expect( subscription.id ).to be_a String
-        expect( subscription.offer.amount ).to be new_offer.amount
+        expect( subscription.offer.amount.to_s ).to eq new_offer.amount # bug in API
         expect( subscription.offer.currency ).to eq new_offer.currency
         expect( subscription.offer.interval ).to eq new_offer.interval
         expect( subscription.offer.name ).to eq new_offer.name
         expect( subscription.livemode ).to be false
-        expect( subscription.amount ).to be new_offer.amount
+        expect( subscription.amount.to_s ).to eq new_offer.amount # bug in API
         expect( subscription.temp_amount ).to be_nil
         expect( subscription.currency ).to eq new_offer.currency
         expect( subscription.name ).to eq new_offer.name
@@ -396,12 +396,12 @@ module Paymill
         subscription.update_offer_with_refund( new_offer )
 
         expect( subscription.id ).to be_a String
-        expect( subscription.offer.amount ).to be new_offer.amount
+        expect( subscription.offer.amount.to_s ).to eq new_offer.amount # bug in API
         expect( subscription.offer.currency ).to eq new_offer.currency
         expect( subscription.offer.interval ).to eq new_offer.interval
         expect( subscription.offer.name ).to eq new_offer.name
         expect( subscription.livemode ).to be false
-        expect( subscription.amount ).to be new_offer.amount
+        expect( subscription.amount.to_s ).to eq new_offer.amount # bug in API
         expect( subscription.temp_amount ).to be_nil
         expect( subscription.currency ).to eq new_offer.currency
         expect( subscription.name ).to eq new_offer.name
@@ -429,12 +429,12 @@ module Paymill
         subscription.update_offer_with_refund_and_capture_date( new_offer )
 
         expect( subscription.id ).to be_a String
-        expect( subscription.offer.amount ).to be new_offer.amount
+        expect( subscription.offer.amount.to_s ).to eq new_offer.amount # bug in API
         expect( subscription.offer.currency ).to eq new_offer.currency
         expect( subscription.offer.interval ).to eq new_offer.interval
         expect( subscription.offer.name ).to eq new_offer.name
         expect( subscription.livemode ).to be false
-        expect( subscription.amount ).to be new_offer.amount
+        expect( subscription.amount.to_s ).to eq new_offer.amount # bug in API
         expect( subscription.temp_amount ).to be_nil
         expect( subscription.currency ).to eq new_offer.currency
         expect( subscription.name ).to eq new_offer.name
@@ -550,12 +550,12 @@ module Paymill
           subscription = Subscription.create( payment: @payment, offer: offer, name: 'To Delete' ).cancel
 
           expect( subscription.id ).to be_a String
-          expect( subscription.offer.amount ).to be offer.amount
+          expect( subscription.offer.amount.to_s ).to eq offer.amount # bug in API
           expect( subscription.offer.currency ).to eq offer.currency
           expect( subscription.offer.interval ).to eq offer.interval
           expect( subscription.offer.name ).to eq offer.name
           expect( subscription.livemode ).to be false
-          expect( subscription.amount ).to be offer.amount
+          expect( subscription.amount.to_s ).to eq offer.amount # bug in API
           expect( subscription.temp_amount ).to be_nil
           expect( subscription.currency ).to eq offer.currency
           expect( subscription.name ).to eq 'To Delete'
@@ -578,12 +578,12 @@ module Paymill
         subscription = Subscription.create( payment: @payment, offer: offer, name: 'To Delete' ).remove
 
         expect( subscription.id ).to be_a String
-        expect( subscription.offer.amount ).to be offer.amount
+        expect( subscription.offer.amount.to_s ).to eq offer.amount # bug in API
         expect( subscription.offer.currency ).to eq offer.currency
         expect( subscription.offer.interval ).to eq offer.interval
         expect( subscription.offer.name ).to eq offer.name
         expect( subscription.livemode ).to be false
-        expect( subscription.amount ).to be offer.amount
+        expect( subscription.amount.to_s ).to eq offer.amount # bug in API
         expect( subscription.temp_amount ).to be_nil
         expect( subscription.currency ).to eq offer.currency
         expect( subscription.name ).to eq 'To Delete'

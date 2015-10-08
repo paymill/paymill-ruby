@@ -28,7 +28,7 @@ module Paymill
         expect( preauthorization ).to be_a Preauthorization
 
         expect( preauthorization.id ).to be_a String
-        expect( preauthorization.amount ).to be amount
+        expect( preauthorization.amount ).to eq amount.to_s # bug in API
         expect( preauthorization.currency ).to eq currency
         expect( preauthorization.description ).to be_nil
         expect( preauthorization.status ).to eq 'closed'
@@ -43,10 +43,10 @@ module Paymill
         expect( preauthorization.payment.card_type ). to eq 'visa'
 
         expect( preauthorization.payment.country ).to be_nil
-        expect( preauthorization.payment.expire_month ).to eq 12
-        expect( preauthorization.payment.expire_year ).to eq 2015
+        expect( preauthorization.payment.expire_month ).to eq '12'
+        expect( preauthorization.payment.expire_year ).to eq '2015'
         expect( preauthorization.payment.card_holder ).to eq 'John Rambo'
-        expect( preauthorization.payment.last4 ).to eq 1111
+        expect( preauthorization.payment.last4 ).to eq '1111'
         expect( preauthorization.payment.is_recurring ).to be true
         expect( preauthorization.payment.is_usable_for_preauthorization ).to be true
 
@@ -67,7 +67,7 @@ module Paymill
         expect( preauthorization ).to be_a Preauthorization
 
         expect( preauthorization.id ).to be_a String
-        expect( preauthorization.amount ).to be amount
+        expect( preauthorization.amount ).to eq amount.to_s # bug in API
         expect( preauthorization.currency ).to eq currency
         expect( preauthorization.description ).to be_nil
         expect( preauthorization.status ).to eq 'closed'
@@ -83,10 +83,10 @@ module Paymill
         expect( preauthorization.payment.card_type ). to eq 'visa'
 
         expect( preauthorization.payment.country ).to be_nil
-        expect( preauthorization.payment.expire_month ).to eq 12
-        expect( preauthorization.payment.expire_year ).to eq 2015
+        expect( preauthorization.payment.expire_month ).to eq '12'
+        expect( preauthorization.payment.expire_year ).to eq '2015'
         expect( preauthorization.payment.card_holder ).to eq 'John Rambo'
-        expect( preauthorization.payment.last4 ).to eq 1111
+        expect( preauthorization.payment.last4 ).to eq '1111'
         expect( preauthorization.payment.is_recurring ).to be true
         expect( preauthorization.payment.is_usable_for_preauthorization ).to be true
 
@@ -109,7 +109,7 @@ module Paymill
         expect( preauthorization ).to be_a Preauthorization
 
         expect( preauthorization.id ).to be_a String
-        expect( preauthorization.amount ).to be amount
+        expect( preauthorization.amount ).to eq amount.to_s # bug in API
         expect( preauthorization.currency ).to eq currency
         expect( preauthorization.description ).to eq 'The Italian Stallion'
         expect( preauthorization.status ).to eq 'closed'
@@ -125,10 +125,10 @@ module Paymill
         expect( preauthorization.payment.card_type ). to eq 'visa'
 
         expect( preauthorization.payment.country ).to be_nil
-        expect( preauthorization.payment.expire_month ).to eq 12
-        expect( preauthorization.payment.expire_year ).to eq 2015
+        expect( preauthorization.payment.expire_month ).to eq '12'
+        expect( preauthorization.payment.expire_year ).to eq '2015'
         expect( preauthorization.payment.card_holder ).to eq 'John Rambo'
-        expect( preauthorization.payment.last4 ).to eq 1111
+        expect( preauthorization.payment.last4 ).to eq '1111'
         expect( preauthorization.payment.is_recurring ).to be true
         expect( preauthorization.payment.is_usable_for_preauthorization ).to be true
 

@@ -28,10 +28,10 @@ module Paymill
       json.each_pair do |key, value|
         case value.class.name
         when 'Array'
-          unless key[-1].eql? 's'
-            instance_variable_set( "@#{key}s", value.map { |e| (e.is_a? String) ? e : objectize( key, e ) } )
+          if key.end_with?('s')
+            instance_variable_set( "@#{key}", value.map { |e| (e.is_a? String) ? e : objectize( key[0...-1], e ) } )
           else
-            instance_variable_set( "@#{key}", value.map { |e| (e.is_a? String) ? e : objectize( key, e ) } )
+            instance_variable_set( "@#{key}s", value.map { |e| (e.is_a? String) ? e : objectize( key, e ) } )
           end
         when 'Hash'
           instance_variable_set( "@#{key}", objectize( key, value ) )

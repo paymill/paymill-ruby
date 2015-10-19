@@ -57,6 +57,14 @@ module Paymill
         expect( refund.app_id ).to be_nil
       end
 
+      it 'should return nested refund in transaction object' do
+        transaction = Transaction.create( token: @token, amount: 100, currency: currency )
+        refund = Refund.create( transaction, amount: 100, description: 'Refunded By Ruby' )
+        transaction_with_refund = Transaction.find( transaction.id )
+
+        expect( transaction_with_refund.refunds.first.id ).to eq refund.id
+      end
+
       it 'should throw ArgumentError when no amount given', :vcr do
         expect{ Refund.create( Transaction.create( token: @token, amount: 290, currency: currency ) ) }.to raise_error ArgumentError
       end

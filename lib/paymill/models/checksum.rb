@@ -18,7 +18,7 @@ module Paymill
     def self.allowed_arguments
       [
         :checksum_type, :amount, :currency, :return_url, :cancel_url, :description,
-        :shipping_address, :billing_address, :items, :shipping_amount, :handling_amount, :client,
+        :shipping_address, :billing_address, :items, :shipping_amount, :handling_amount, :client_id,
         :require_reusable_payment, :reusable_payment_description,
         :fee_amount, :fee_payment, :fee_currency, :app_id
       ]

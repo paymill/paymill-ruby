@@ -1,5 +1,5 @@
 ### v2.0.1
-  * allow creating [Checksum](https://github.com/paymill/paymill-ruby/blob/master/lib/paymill/models/checksum.rb#L19) with the parameters __shipping_amount__, __handling_amount__ and __client__
+  * allow creating [Checksum](https://github.com/paymill/paymill-ruby/blob/master/lib/paymill/models/checksum.rb#L19) with the parameters __shipping_amount__, __handling_amount__ and __client_id__
   * fix [issue #23](https://github.com/paymill/paymill-ruby/issues/23) Checksum with Client
   * fix serialisation for arrays [PR #24](https://github.com/paymill/paymill-ruby/pull/24), thanks to [@morgoth](https://github.com/morgoth)
 

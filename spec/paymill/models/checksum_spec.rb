@@ -33,6 +33,45 @@ module Paymill
         expect( checksum.updated_at ).to be_a Time
       end
 
+      it 'should create new checksum with minimum parameters and shipping and handling amount', :vcr do
+        checksum = Checksum.create( checksum_type: 'paypal', amount: 4200, currency: 'EUR', description: 'Chuck Testa', return_url: 'https://testa.com', cancel_url: 'https://test.com/cancel', shipping_amount: 300, handling_amount: 500 )
+
+        expect( checksum.action ).to eq 'transaction'
+        expect( checksum.checksum ).to be_a String
+        expect( checksum.data ).to eq 'amount=4200&currency=EUR&description=Chuck+Testa&return_url=https%3A%2F%2Ftesta.com&cancel_url=https%3A%2F%2Ftest.com%2Fcancel&shipping_amount=300&handling_amount=500'
+        expect( checksum.id ).to be_a String
+        expect( checksum.type ).to eq 'paypal'
+        expect( checksum.app_id ).to be_nil
+        expect( checksum.created_at ).to be_a Time
+        expect( checksum.updated_at ).to be_a Time
+      end
+
+      it 'should create new checksum with minimum parameters and client', :vcr do
+        checksum = Checksum.create( checksum_type: 'paypal', amount: 4200, currency: 'EUR', description: 'Chuck Testa', return_url: 'https://testa.com', cancel_url: 'https://test.com/cancel', client: 'client_c43af14afac0e4f58f90' )
+
+        expect( checksum.action ).to eq 'transaction'
+        expect( checksum.checksum ).to be_a String
+        expect( checksum.data ).to eq 'amount=4200&currency=EUR&description=Chuck+Testa&return_url=https%3A%2F%2Ftesta.com&cancel_url=https%3A%2F%2Ftest.com%2Fcancel&client=client_c43af14afac0e4f58f90'
+        expect( checksum.id ).to be_a String
+        expect( checksum.type ).to eq 'paypal'
+        expect( checksum.app_id ).to be_nil
+        expect( checksum.created_at ).to be_a Time
+        expect( checksum.updated_at ).to be_a Time
+      end
+
+      it 'should create new checksum with minimum parameters and reusable payment', :vcr do
+        checksum = Checksum.create( checksum_type: 'paypal', amount: 4200, currency: 'EUR', description: 'Chuck Testa', return_url: 'https://testa.com', cancel_url: 'https://test.com/cancel', require_reusable_payment: true, reusable_payment_description: 'recurring paypal' )
+
+        expect( checksum.action ).to eq 'transaction'
+        expect( checksum.checksum ).to be_a String
+        expect( checksum.data ).to eq 'amount=4200&currency=EUR&description=Chuck+Testa&return_url=https%3A%2F%2Ftesta.com&cancel_url=https%3A%2F%2Ftest.com%2Fcancel&require_reusable_payment=true&reusable_payment_description=recurring+paypal'
+        expect( checksum.id ).to be_a String
+        expect( checksum.type ).to eq 'paypal'
+        expect( checksum.app_id ).to be_nil
+        expect( checksum.created_at ).to be_a Time
+        expect( checksum.updated_at ).to be_a Time
+      end
+
       it 'should create new checksum with minimum parameters and billing address', :vcr do
         checksum = Checksum.create( checksum_type: 'paypal', amount: 4200, currency: 'EUR', description: 'Chuck Testa', return_url: 'https://testa.com', cancel_url: 'https://test.com/cancel', billing_address: billing_address )
 

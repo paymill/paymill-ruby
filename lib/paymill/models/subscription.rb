@@ -48,7 +48,7 @@ module Paymill
     end
 
     def update_offer_with_refund_and_capture_date( offer )
-      update_offer( offer, 1 )
+      update_offer( offer, 2 )
     end
 
     def stop_trial_period()
@@ -136,7 +136,7 @@ module Paymill
       @amount = nil
       @payment = nil
       @offer = offer
-      update( offer_change_type: 1 )
+      update( offer_change_type: flag )
     end
 
   end

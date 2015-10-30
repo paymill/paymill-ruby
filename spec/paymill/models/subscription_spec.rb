@@ -358,10 +358,9 @@ module Paymill
 
       it 'should change the offer of a subscription with no refund and unchanged capture date', :vcr do
         subscription = Subscription.create( payment: @payment, offer: offer )
+        subscription_before_update = subscription.dup
         new_offer = Offer.create( name: 'Foo', amount: 4990, currency: 'EUR', interval: '2 WEEK')
-
         subscription.update_offer_without_changes( new_offer )
-
         expect( subscription.id ).to be_a String
         expect( subscription.offer.amount.to_s ).to eq new_offer.amount # bug in API
         expect( subscription.offer.currency ).to eq new_offer.currency
@@ -378,6 +377,7 @@ module Paymill
         expect( subscription.period_of_validity ).to be_nil
         expect( subscription.end_of_period ).to be_nil
         expect( subscription.next_capture_at ).to be_a Time
+        expect( subscription.next_capture_at ).to eq subscription_before_update.next_capture_at
         expect( subscription.created_at ).to be_a Time
         expect( subscription.updated_at ).to be_a Time
         expect( subscription.canceled_at ).to be_nil
@@ -391,6 +391,7 @@ module Paymill
 
       it 'should change the offer of a subscription with refund and unchanged capture date', :vcr do
         subscription = Subscription.create( payment: @payment, offer: offer )
+        subscription_before_update = subscription.dup
         new_offer = Offer.create( name: 'Foo', amount: 1990, currency: 'EUR', interval: '2 WEEK')
 
         subscription.update_offer_with_refund( new_offer )
@@ -411,6 +412,7 @@ module Paymill
         expect( subscription.period_of_validity ).to be_nil
         expect( subscription.end_of_period ).to be_nil
         expect( subscription.next_capture_at ).to be_a Time
+        expect( subscription.next_capture_at ).to eq subscription_before_update.next_capture_at
         expect( subscription.created_at ).to be_a Time
         expect( subscription.updated_at ).to be_a Time
         expect( subscription.canceled_at ).to be_nil
@@ -424,6 +426,7 @@ module Paymill
 
       it 'should change the offer of a subscription with refund and capture date', :vcr do
         subscription = Subscription.create( payment: @payment, offer: offer )
+        subscription_before_update = subscription.dup
         new_offer = Offer.create( name: 'Foo', amount: 1990, currency: 'EUR', interval: '2 WEEK')
 
         subscription.update_offer_with_refund_and_capture_date( new_offer )
@@ -444,6 +447,7 @@ module Paymill
         expect( subscription.period_of_validity ).to be_nil
         expect( subscription.end_of_period ).to be_nil
         expect( subscription.next_capture_at ).to be_a Time
+        expect( subscription.next_capture_at ).to be < subscription_before_update.next_capture_at
         expect( subscription.created_at ).to be_a Time
         expect( subscription.updated_at ).to be_a Time
         expect( subscription.canceled_at ).to be_nil

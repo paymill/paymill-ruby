@@ -20,7 +20,7 @@ module Paymill
   autoload :PaymentMethod,        'paymill/models/payment_method'
   autoload :Preauthorization,     'paymill/models/preauthorization'
   autoload :Refund,               'paymill/models/refund.rb'
-  autoload :ShoppingCartItem,     'paymill/models/shopping_cart_item'
+  autoload :Item,                 'paymill/models/item'
   autoload :Subscription,         'paymill/models/subscription'
   autoload :SubscriptionCount,    'paymill/models/subscription_count'
   autoload :Transaction,          'paymill/models/transaction'

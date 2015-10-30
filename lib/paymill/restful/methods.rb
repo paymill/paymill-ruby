@@ -71,7 +71,7 @@ module Paymill
       parameters.each do |key, value|
         if value.is_a? Array
           value.each.with_index do |e, index|
-            if e.is_a? ShoppingCartItem
+            if e.is_a? Item
               e.instance_variables.each do |var|
                 attributes["items[#{index}][#{var.to_s[1..-1]}]"] = e.instance_variable_get( var ) unless e.instance_variable_get( var ).to_s.empty?
               end

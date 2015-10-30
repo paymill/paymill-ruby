@@ -1,3 +1,7 @@
+### v2.0.2
+  * fix change class name of ShoppingCartItem to Item
+  * fix [PR #25](https://github.com/paymill/paymill-ruby/pull/25) update of subscription, thanks to [@Archetylator](https://github.com/Archetylator)
+
 ### v2.0.1
   * allow creating [Checksum](https://github.com/paymill/paymill-ruby/blob/master/lib/paymill/models/checksum.rb#L19) with the parameters __shipping_amount__, __handling_amount__ and __client_id__
   * fix [issue #23](https://github.com/paymill/paymill-ruby/issues/23) Checksum with Client

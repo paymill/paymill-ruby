@@ -2,7 +2,7 @@ module Paymill
   class Checksum
     extend Restful::Create
 
-    attr_reader :id, :created_at, :updated_at, :app_id, :action, :checksum, :data, :type, :shipping_address
+    attr_reader :id, :created_at, :updated_at, :app_id, :action, :checksum, :data, :type, :items, :shipping_address
 
     def initialize( json )
       deserialize( json )

@@ -3,7 +3,7 @@ module Paymill
     include Restful::Update
 
     attr_accessor :description
-    attr_reader :amount, :client, :currency, :origin_amount, :status, :livemode, :refunds,
+    attr_reader :amount, :client, :currency, :origin_amount, :status, :livemode, :refunds, :items,
                 :response_code, :is_fraud, :short_id, :fees, :invoices, :payment, :preauthorization, :mandate_reference
 
     protected

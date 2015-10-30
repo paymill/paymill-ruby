@@ -9,12 +9,12 @@ module Paymill
       )
     }
     let( :rambo_poster ) {
-      ShoppingCartItem.new(
+      Item.new(
         name: "Rambo Poster", description: "John J. Rambo", amount: 2200, quantity: 3, item_number: "898-24342-343", url: "http://www.store.com/items/posters/12121-rambo"
       )
     }
     let( :comando_poster ) {
-      ShoppingCartItem.new(
+      Item.new(
         name: "Comando Poster", description: "John Matrix", amount: 3100, quantity: 1, item_number: "898-24342-341", url: "http://www.store.com/items/posters/12121-comando"
       )
     }

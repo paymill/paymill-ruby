@@ -47,11 +47,11 @@ module Paymill
       end
 
       it 'should create new checksum with minimum parameters and client', :vcr do
-        checksum = Checksum.create( checksum_type: 'paypal', amount: 4200, currency: 'EUR', description: 'Chuck Testa', return_url: 'https://testa.com', cancel_url: 'https://test.com/cancel', client_id: 'client_c43af14afac0e4f58f90' )
+        checksum = Checksum.create( checksum_type: 'paypal', amount: 4200, currency: 'EUR', description: 'Chuck Testa', return_url: 'https://testa.com', cancel_url: 'https://test.com/cancel', client: 'client_c43af14afac0e4f58f90' )
 
         expect( checksum.action ).to eq 'transaction'
         expect( checksum.checksum ).to be_a String
-        expect( checksum.data ).to eq 'amount=4200&currency=EUR&description=Chuck+Testa&return_url=https%3A%2F%2Ftesta.com&cancel_url=https%3A%2F%2Ftest.com%2Fcancel&client_id=client_c43af14afac0e4f58f90'
+        expect( checksum.data ).to eq 'amount=4200&currency=EUR&description=Chuck+Testa&return_url=https%3A%2F%2Ftesta.com&cancel_url=https%3A%2F%2Ftest.com%2Fcancel&client=client_c43af14afac0e4f58f90'
         expect( checksum.id ).to be_a String
         expect( checksum.type ).to eq 'paypal'
         expect( checksum.app_id ).to be_nil
